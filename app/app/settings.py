@@ -47,7 +47,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = ["rest_framework", "rest_framework_gis", "leaflet", "django_filters"]
 
-PROJECTY_APPS = ["app"]
+PROJECTY_APPS = ["app", "core"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECTY_APPS
 
@@ -143,3 +143,6 @@ LEAFLET_CONFIG = {
     "SCALE": "both",
     "ATTRIBUTION_PREFIX": "Thiago Silveira Sun Coral API",
 }
+
+
+AUTH_USER_MODEL = 'core.User' #core=app, user=model in the app assig user model
