@@ -1,12 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
-    PermissionsMixin
+                                        PermissionsMixin
 from django.conf import settings
 
-class UserManager(BaseUserManager): #user manager class
+
+def recipe_image_file_path(instance, filename):
+    """Generate file path for new recipe image"""
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+
+    return os.path.join('uploads/recipe/', filename)
+
+
+class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
-        """Creates and saves a new user"""
+        """Creates and saves a new User"""
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(email=self.normalize_email(email), **extra_fields)
@@ -14,9 +23,9 @@ class UserManager(BaseUserManager): #user manager class
         user.save(using=self._db)
 
         return user
-    
+
     def create_superuser(self, email, password):
-        """Create and saves a new super user"""
+        """Creates and saves a new super user"""
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
@@ -26,7 +35,7 @@ class UserManager(BaseUserManager): #user manager class
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Custom user model that supports using email instead of username"""
+    """Custom user model that suppors using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)

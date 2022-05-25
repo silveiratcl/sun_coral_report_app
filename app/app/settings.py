@@ -11,43 +11,52 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import environ
+
+from decouple import config
+from unipath import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+## BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = Path(__file__).parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-env = environ.Env(DEBUG=(bool,False))
+# env = environ.Env(DEBUG=(bool, False))
 
-environ.Env.read_env(env_file=".env")
+# environ.Env.read_env(env_file=".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
+#DEBUG = env("DEBUG")
+DEBUG = config('DEBUG', default=False, cast=bool)
+TEMPLATE_DEBUG = DEBUG
+
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
 
 DJANGO_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django.contrib.gis",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "rest_framework_gis", "leaflet", "django_filters"]
+THIRD_PARTY_APPS = ['rest_framework', 'rest_framework_gis', 'leaflet', 'django_filters']
 
-PROJECTY_APPS = ["app", "core"]
+PROJECTY_APPS = ['core']
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECTY_APPS
 
@@ -86,15 +95,16 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': env("POSTGRES_DBNAME"),
-        'USER': env("POSTGRES_USER"),
-        'PASSWORD': env("POSTGRES_PASS"),
-        'HOST': env("PG_HOST"),
-        'PORT': env("PG_PORT"),
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": config("POSTGRES_DBNAME"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASS"),
+        "HOST": config("PG_HOST"),
+        "PORT": config("PG_PORT"),
     }
 }
+
 
 
 # Password validation
@@ -135,14 +145,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+AUTH_USER_MODEL = 'core.User' # core=app, user=model in the app assig user model
+
 LEAFLET_CONFIG = {
-    "DEFAULT_CENTER": (-27.3119702,-48.3861091),
+    "DEFAULT_CENTER": (-26.28, -48.37),
     "DEFAULT_ZOOM": 8,
     "MAX_ZOOM": 20,
     "MIN_ZOOM": 3,
     "SCALE": "both",
-    "ATTRIBUTION_PREFIX": "Thiago Silveira Sun Coral API",
+    "ATTRIBUTION_PREFIX": "API-Imperfect Hospitals API",
 }
-
-
-AUTH_USER_MODEL = 'core.User' #core=app, user=model in the app assig user model
