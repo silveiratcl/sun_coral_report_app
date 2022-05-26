@@ -54,9 +54,17 @@ DJANGO_APPS = [
     'django.contrib.gis',
 ]
 
-THIRD_PARTY_APPS = ['rest_framework', 'rest_framework_gis', 'leaflet', 'django_filters']
+THIRD_PARTY_APPS = [
+    'rest_framework', 
+    'rest_framework_gis', 
+    'leaflet', 
+    'django_filters',
+]
 
-PROJECTY_APPS = ['core']
+PROJECTY_APPS = [
+    'core',
+    'user',
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECTY_APPS
 
@@ -144,6 +152,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
 
 AUTH_USER_MODEL = 'core.User' # core=app, user=model in the app assig user model
 
