@@ -60,7 +60,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'leaflet',
     'django_filters',
-    #'drf_spetacular',
+    'drf_spectacular',
 ]
 
 PROJECTY_APPS = [
@@ -161,11 +161,15 @@ STATIC_ROOT = '/vol/web/static'
 
 AUTH_USER_MODEL = 'core.User' # core=app, user=model in the app assig user model
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": (-26.28, -48.37),
     "DEFAULT_ZOOM": 8,
     "MAX_ZOOM": 20,
     "MIN_ZOOM": 3,
     "SCALE": "both",
-    "ATTRIBUTION_PREFIX": "API-Imperfect Hospitals API",
+    "ATTRIBUTION_PREFIX": "Sun Coral report  API",
 }

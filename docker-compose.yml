@@ -12,7 +12,7 @@ services:
       volumes:
          - ./app:/app
       ports:
-         - 8000:8000
+         - 8000:8000 ### ports
       env_file:
          - .env
       restart: "on-failure"

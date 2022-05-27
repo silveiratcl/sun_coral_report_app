@@ -1,8 +1,12 @@
+"""
+Serializers for the user API View
+"""
+
 from django.contrib.auth import (
     get_user_model,
     authenticate,
 )
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
@@ -35,7 +39,7 @@ class AuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type': 'password'},
-        trim_whitespace=False
+        trim_whitespace=False,
     )
 
     def validate(self, attrs):
