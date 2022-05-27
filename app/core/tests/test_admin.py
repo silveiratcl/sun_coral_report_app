@@ -4,6 +4,7 @@ from django.urls import reverse
 
 
 class AdminSiteTests(TestCase):
+    """Tests for Django admin"""
 
     def setUp(self):
         self.client = Client()
@@ -13,12 +14,12 @@ class AdminSiteTests(TestCase):
         )
         self.client.force_login(self.admin_user)
         self.user = get_user_model().objects.create_user(
-            email='test@gmail.com',
+            email='user@gmail.com',
             password='password123',
-            name='Test user full name'
+            name='Test user'
         )
 
-    def test_users_listed(self):
+    def test_users_list(self):
         """Test that users are listed on user page"""
         url = reverse('admin:core_user_changelist')
         res = self.client.get(url)
@@ -26,13 +27,14 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, self.user.name)
         self.assertContains(res, self.user.email)
 
-    def test_user_change_page(self):
+
+    def test_edit_user_page(self):
         """Test that the user edit page works"""
         url = reverse('admin:core_user_change', args=[self.user.id])
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)
-   
+
     def test_create_user_page(self):
         """Test that the create user page works"""
         url = reverse('admin:core_user_add')

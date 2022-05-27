@@ -55,10 +55,12 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework', 
-    'rest_framework_gis', 
-    'leaflet', 
+    'rest_framework',
+    'rest_framework_gis',
+    'rest_framework.authtoken',
+    'leaflet',
     'django_filters',
+    #'drf_spetacular',
 ]
 
 PROJECTY_APPS = [

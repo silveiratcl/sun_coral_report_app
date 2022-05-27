@@ -31,7 +31,7 @@ class PublicUserApiTests(TestCase):
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        user = get_user_model().objects.get(**res.data)
+        user = get_user_model().objects.get(email=payload['email'])
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
 
@@ -40,10 +40,9 @@ class PublicUserApiTests(TestCase):
         payload = {
             'email': 'test@gmail.com',
             'password': 'testpass',
-            'name': 'Test',
+            'name': 'Test name',
         }
         create_user(**payload)
-
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -65,17 +64,35 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_for_user(self):
         """Test that a token is created for the user"""
-        payload = {'email': 'test@gmail.com', 'password': 'testpass'}
+        user_details = {
+            'name': 'Test Name',
+            'email': 'test@gmail.com',
+            'password': 'test-user-pasword123',
+        }
+
+        payload = {
+            'email': user_details['email'],
+            'password': user_details['password'],
+        }
         create_user(**payload)
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_create_token_invalid_credentials(self):
+    def test_create_token_bad_credentials(self):
         """Test that token is not created if invalid credentials are given"""
-        create_user(email='test@gmail.com', password="testpass")
-        payload = {'email': 'test@gmail.com', 'password': 'wrong'}
+        create_user(email='test@gmail.com', password="goodpass")
+
+        payload = {'email': 'test@gmail.com', 'password': 'badpass'}
+        res = self.client.post(TOKEN_URL, payload)
+
+        self.assertNotIn('token', res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_blank_password(self):
+        """Test posting a blank pass returns an error"""
+        payload = {'email': 'test@gmail.com', 'password': ''}
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
@@ -109,7 +126,7 @@ class PrivateUserApiTests(TestCase):
         self.user = create_user(
             email='test@gmail.com',
             password='testpass',
-            name='name'
+            name='name',
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -121,7 +138,7 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, {
             'name': self.user.name,
-            'email': self.user.email
+            'email': self.user.email,
         })
 
     def test_post_me_not_allowed(self):
@@ -136,7 +153,7 @@ class PrivateUserApiTests(TestCase):
 
         res = self.client.patch(ME_URL, payload)
 
-        self.user.refresh_from_db()
+        self.user.refresh_from_db() ## check db or postgres_db
         self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
