@@ -30,6 +30,5 @@ urlpatterns = [
     ),
     path('api/user/', include('user.urls')),
     path('api/markers/', include('markers.urls')),
-
 ]
 admin.site.site_header = "Sun Coral Report Admin"
