@@ -18,13 +18,13 @@ makemigrations:
 	docker-compose exec api python manage.py makemigrations
 
 superuser:
-	docker-compose exec api python manage.py createsuperuser	
+	docker-compose exec api python manage.py createsuperuser
 
 down-v:
 	docker-compose down -v
 
 volume:
-	docker volume inspect sun_coral_report_app_postgres_data	
+	docker volume inspect sun_coral_report_app_postgres_data
 
 shell:
 	docker-compose exec api python3 manage.py shell

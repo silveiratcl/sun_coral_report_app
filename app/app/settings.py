@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
 PROJECTY_APPS = [
     'core',
     'user',
+    'markers',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECTY_APPS
@@ -166,7 +167,7 @@ REST_FRAMEWORK = {
 }
 
 LEAFLET_CONFIG = {
-    "DEFAULT_CENTER": (-26.28, -48.37),
+    "DEFAULT_CENTER": (-48.37, -26.28),
     "DEFAULT_ZOOM": 8,
     "MAX_ZOOM": 20,
     "MIN_ZOOM": 3,
