@@ -48,7 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-#marker # HERE CAN BE ADDED MORE FIELDS
 class Marker(models.Model):
     """A marker with name and location."""
     user = models.ForeignKey(
