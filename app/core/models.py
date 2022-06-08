@@ -1,3 +1,6 @@
+import uuid
+import os
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -7,12 +10,12 @@ from django.contrib.auth.models import (
 from django.conf import settings ### added for marker
 from django.contrib.gis.db import models ###
 
-def recipe_image_file_path(instance, filename):
-    """Generate file path for new recipe image"""
-    ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
+def marker_image_file_path(instance, filename):
+    """Generate file path for new marker image"""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads/recipe/', filename)
+    return os.path.join('uploads', 'markers', filename)
 
 
 class UserManager(BaseUserManager):
@@ -49,13 +52,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 class Marker(models.Model):
-    """A marker with name and location."""
+    """A marker object."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
     )
     name = models.CharField(max_length=255) #local name
     location = models.PointField()
+    image = models.ImageField(null=True, upload_to=marker_image_file_path) #image function
 
     def __str__(self):
         """Return string representation."""

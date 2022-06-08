@@ -11,6 +11,7 @@ services:
                 python manage.py runserver 0.0.0.0:8000"
       volumes:
          - ./app:/app
+         - dev-static-data:/vol/web
       ports:
          - 8000:8000 ### ports
       env_file:
@@ -53,3 +54,4 @@ networks:
 
 volumes:
    postgres_data:
+   dev-static-data: #
