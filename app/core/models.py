@@ -15,7 +15,7 @@ def marker_image_file_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads', 'markers', filename)
+    return os.path.join('uploads', 'markers', filename) #need fix to insert the whole path missing 8080 on the link
 
 
 class UserManager(BaseUserManager):
@@ -41,7 +41,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Custom user model that suppors using email instead of username"""
+    """Custom user model that supports using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -60,7 +60,7 @@ class Marker(models.Model):
     name = models.CharField(max_length=255) #local name
     location = models.PointField()
     image = models.ImageField(null=True, upload_to=marker_image_file_path) #image function
-
+    #models.CharField(max_length=100, blank=True, default='') image not mandatory
     def __str__(self):
         """Return string representation."""
         return self.name

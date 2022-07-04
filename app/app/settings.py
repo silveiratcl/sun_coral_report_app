@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from decouple import config
@@ -39,7 +40,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -158,7 +159,7 @@ STATIC_URL = '/static/static/'
 MEDIA_URL = '/static/media/'
 
 MEDIA_ROOT = '/vol/web/media/'
-STATIC_ROOT = '/vol/web/static/'
+STATIC_ROOT = '/vol/web/static/' #set folder to record the vol
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -185,5 +186,5 @@ LEAFLET_CONFIG = {
     "MAX_ZOOM": 20,
     "MIN_ZOOM": 3,
     "SCALE": "both",
-    "ATTRIBUTION_PREFIX": "Sun Coral report  API",
+    "ATTRIBUTION_PREFIX": "Sun Coral report API",
 }

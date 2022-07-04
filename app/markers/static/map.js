@@ -17,13 +17,15 @@ async function load_markers() {
 async function render_markers() {
     const markers = await load_markers();
     L.geoJSON(markers)
-    /*.bindPopup((layer) => layer.feature.properties.name)*/
-    .bindPopup((layer) => '<img src="'+layer.feature.properties.image+'"/><p>'+layer.feature.properties.name+'</p>')
+    .bindPopup((layer) => '<a href="'+layer.feature.properties.image+'" target="_blank" >Image</a><p>'+layer.feature.properties.name+'</p>')
     .addTo(map);
 }
 
 map.on("moveend", render_markers);
 
+// .bindPopup((layer) => '<img src="'+layer.feature.properties.image+'"/><p>'+layer.feature.properties.name+'</p>')
+
+ /*.bindPopup((layer) => layer.feature.properties.name)*/
 
 /*.bindPopup((layer) => '<img src="'+layer.feature.properties.image+'"/><p>'+layer.feature.properties.name+'</p>')*/
 

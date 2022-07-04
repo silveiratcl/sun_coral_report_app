@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+    restart: always
+    volumes:
+     - static-data:/vol/web
+    environment:
+     - PG_HOST=postgres-db
+     - POSTGRES_DBNAME=${POSTGRES_DBNAME}
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASS=${POSTGRES_PASS}
+     - SECRET_KEY=${SECRET_KEY}
+     - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+     - PG_PORT=${PG_PORT}
+    depends_on:
+    - postgres-db
+
+  postgres-db:
+    image: kartoza/postgis:12.0
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DBNAME=${POSTGRES_DBNAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+
+  proxy:
+    build:
+      context: ./proxy
+    restart: always
+    depends_on:
+      - api
+    ports:
+    - 8000:8000
+    volumes:
+      - static-data:/vol/static
+
+volumes:
+  postgres-data:
+  static-data:
+
+
+
+

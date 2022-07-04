@@ -9,6 +9,15 @@ services:
          sh -c "python manage.py wait_for_db &&
                 python manage.py migrate &&
                 python manage.py runserver 0.0.0.0:8000"
+      environment:
+         - PG_HOST=postgres-db
+         - POSTGRES_DBNAME=${POSTGRES_DBNAME}
+         - POSTGRES_USER=${POSTGRES_USER}
+         - POSTGRES_PASS=${POSTGRES_PASS}
+         - SECRET_KEY=${SECRET_KEY}
+         - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+         - PG_PORT=${PG_PORT}
+         - DEBUG=1
       volumes:
          - ./app:/app
          - dev-static-data:/vol/web
@@ -17,15 +26,16 @@ services:
       env_file:
          - .env
       restart: "on-failure"
+
       depends_on:
          - postgres-db
-      networks:
-         - sc-api
+      #networks:
+       #  - sc-api
 
    postgres-db:
       image: kartoza/postgis:12.0
-      ports:
-         - 5432:5432
+     # ports:
+     #   - 5432:5432
       volumes:
          - postgres_data:/var/lib/postgresql
       environment:
@@ -33,20 +43,8 @@ services:
          - POSTGRES_PASS=${POSTGRES_PASS}
          - POSTGRES_DBNAME=${POSTGRES_DBNAME}
       restart: "on-failure"
-      networks:
-         - sc-api
-
-   nginx:
-      restart: always
-      depends_on:
-         - api
-      build:
-         context: ./nginx
-         dockerfile: Dockerfile.dev
-      ports:
-         - 8080:80
-      networks:
-         - sc-api
+      #networks:
+       #  - sc-api
 
 networks:
    sc-api:

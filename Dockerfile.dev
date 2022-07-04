@@ -2,6 +2,7 @@ FROM python:3.9.2-slim-buster
 
 WORKDIR /app
 COPY ./app /app
+COPY ./scripts /scripts
 
 LABEL maintainer="silveira.tcl@gmail.com"
 LABEL description="Development image for the sun coral GeoDjango API"
@@ -12,7 +13,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update \
     && apt-get -y install netcat gcc postgresql \
-    && apt-get clean
+    && apt-get clean linux-headers
 ##
 RUN apt-get update && apt-get install -y \
     g++ \
@@ -27,6 +28,7 @@ RUN pip install --upgrade pip
 
 COPY ./requirements.txt /app/requirements.txt
 
+
 RUN pip install -r requirements.txt
 
 #RUN adduser \
@@ -37,7 +39,12 @@ RUN pip install -r requirements.txt
 RUN mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     #chown -R django-user:django-user /vol && \
-    chmod -R 755 /vol
+    chmod -R 755 /vol && \
+    chmod -R +x /scripts
+
+ENV PATH="/scripts:/py/bin:$PATH"
+
+CMD ["run.sh"]
 
 #USER django-user
 ##
