@@ -6,17 +6,20 @@ services:
       context: .
     restart: always
     volumes:
-     - static-data:/vol/web
+      - static-data:/vol/web
     environment:
-     - PG_HOST=postgres-db
-     - POSTGRES_DBNAME=${POSTGRES_DBNAME}
-     - POSTGRES_USER=${POSTGRES_USER}
-     - POSTGRES_PASS=${POSTGRES_PASS}
-     - SECRET_KEY=${SECRET_KEY}
-     - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-     - PG_PORT=${PG_PORT}
+      - DB_HOST=postgres-db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DB_PORT=${DB_PORT}
     depends_on:
-    - postgres-db
+      - postgres-db
+    networks:
+      - sc-api
+      - default
 
   postgres-db:
     image: kartoza/postgis:12.0
@@ -24,9 +27,9 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DBNAME=${POSTGRES_DBNAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_DBNAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASS=${DB_PASS}
 
   proxy:
     build:
@@ -35,14 +38,14 @@ services:
     depends_on:
       - api
     ports:
-    - 8000:8000
+      - 80:8000 ###
     volumes:
       - static-data:/vol/static
+
+networks:
+  sc-api:
+     driver: bridge
 
 volumes:
   postgres-data:
   static-data:
-
-
-
-

@@ -6,6 +6,9 @@ endif
 
 build:
 	docker-compose up --build -d --remove-orphans
+
+up deploy:
+	docker-compose -f docker-compose-deploy.yml up
 up:
 	docker-compose up -d
 down:

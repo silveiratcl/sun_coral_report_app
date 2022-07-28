@@ -10,46 +10,45 @@ services:
                 python manage.py migrate &&
                 python manage.py runserver 0.0.0.0:8000"
       environment:
-         - PG_HOST=postgres-db
-         - POSTGRES_DBNAME=${POSTGRES_DBNAME}
-         - POSTGRES_USER=${POSTGRES_USER}
-         - POSTGRES_PASS=${POSTGRES_PASS}
+         - DB_HOST=postgres-db
+         - DB_NAME=${DB_NAME}
+         - DB_USER=${DB_USER}
+         - DB_PASS=${DB_PASS}
          - SECRET_KEY=${SECRET_KEY}
          - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-         - PG_PORT=${PG_PORT}
+         #- DB_PORT=${DB_PORT}
          - DEBUG=1
       volumes:
          - ./app:/app
-         - dev-static-data:/vol/web
+         - static-data:/vol/web
       ports:
          - 8000:8000 ### ports
       env_file:
          - .env
       restart: "on-failure"
-
       depends_on:
          - postgres-db
-      #networks:
-       #  - sc-api
+      networks:
+         - sc-api
 
    postgres-db:
       image: kartoza/postgis:12.0
-     # ports:
-     #   - 5432:5432
+      ports:
+         - 5432:5432
       volumes:
-         - postgres_data:/var/lib/postgresql
+         - postgres-data:/var/lib/postgresql
       environment:
-         - POSTGRES_USER=${POSTGRES_USER}
-         - POSTGRES_PASS=${POSTGRES_PASS}
-         - POSTGRES_DBNAME=${POSTGRES_DBNAME}
+         - POSTGRES_DBNAME=${DB_NAME}
+         - POSTGRES_USER=${DB_USER}
+         - POSTGRES_PASS=${DB_PASS}
       restart: "on-failure"
-      #networks:
-       #  - sc-api
+      networks:
+         - sc-api
 
 networks:
    sc-api:
       driver: bridge
 
 volumes:
-   postgres_data:
-   dev-static-data: #
+   postgres-data:
+   static-data:

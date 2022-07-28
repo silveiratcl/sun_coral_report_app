@@ -32,15 +32,22 @@ BASE_DIR = Path(__file__).parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
 #DEBUG = env("DEBUG")
-DEBUG = config('DEBUG', default=False, cast=bool)
-TEMPLATE_DEBUG = DEBUG
+#DEBUG = config('DEBUG', default=False, cast=bool)
+#TEMPLATE_DEBUG = DEBUG
+DEBUG = bool(int(config('DEBUG', 0)))
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = []
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        config('ALLOWED_HOSTS','').split(','),
+    )
+)
 
 
 # Application definition
@@ -109,11 +116,11 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": config("POSTGRES_DBNAME"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASS"),
-        "HOST": config("PG_HOST"),
-        "PORT": config("PG_PORT"),
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASS"),
+        "HOST": config("DB_HOST"),
+        #"PORT": config("DB_PORT"),
     }
 }
 
