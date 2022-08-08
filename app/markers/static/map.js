@@ -5,7 +5,7 @@ const map = L.map("map", { layers: [osm], minZoom: 5 });
 map.
     locate()
     .on("locationfound", (e) => map.setView(e.latlng, 8))
-    .on("locationerror", () => map.setView([-48.37, -26.28], 5));
+    .on("locationerror", () => map.setView([-26.28,-48.37], 5));
 
 async function load_markers() {
     const markers_url = `/api/markers/markers/?in_bbox=${map.getBounds().toBBoxString()}`
