@@ -24,23 +24,23 @@ class MarkerViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.InBBoxFilter,)
     queryset = Marker.objects.all()
     serializer_class = MarkerSerializer
-    authentication_classes = []
-    permission_classes = []
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    #authentication_classes = []
+    #permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    # def get_queryset(self):
-    #     """Retrieve markers for authenticated user"""
-    #     return self.queryset.filter(user=self.request.user).order_by('-id')
+    def get_queryset(self):
+         """Retrieve markers for authenticated user"""
+         return self.queryset.filter(user=self.request.user).order_by('-id')
 
-    # def get_serializer_class(self):
-    #     """Return the serializer class for request"""
-    #     if self.action == 'list':
-    #         return serializers.MarkerSerializer
-    #     elif self.action == 'upload_image':
-    #         return serializers.MarkerImageSerializer #########
+    def get_serializer_class(self):
+         """Return the serializer class for request"""
+         if self.action == 'list':
+             return serializers.MarkerSerializer
+         elif self.action == 'upload_image':
+             return serializers.MarkerImageSerializer #########
 
-    #     return self.serializer_class
+         return self.serializer_class
 
     def perform_create(self, serializer):
         """Create a new marker"""
@@ -61,3 +61,14 @@ class MarkersMapView(TemplateView):
     """Markers map view."""
 
     template_name = 'map.html'
+    permission_classes = []
+    authentication_classes = []
+    bbox_filter_field = 'location'
+    filter_backends = (filters.InBBoxFilter,)
+    queryset = Marker.objects.all()
+    serializer_class = MarkerSerializer
+
+    #def get(self, request):
+     #   return Response({'map.html'})
+
+
