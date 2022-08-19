@@ -15,7 +15,7 @@ def marker_image_file_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads', 'markers', filename) #need fix to insert the whole path missing 8080 on the link
+    return os.path.join('uploads', 'markers', filename)
 
 
 class UserManager(BaseUserManager):
