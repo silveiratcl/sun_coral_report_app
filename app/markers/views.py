@@ -68,7 +68,14 @@ class MarkersMapView(TemplateView):
     queryset = Marker.objects.all()
     serializer_class = MarkerSerializer
 
+    def get_serializer_class(self):
+         """Return the serializer class for request"""
+         if self.action == 'list':
+            return serializers.MarkerSerializer
+         elif self.action == 'upload_image':
+            return serializers.MarkerImageSerializer #########
+
     #def get(self, request):
-     #   return Response({'map.html'})
+        #return Response({'map.html'}) #https://techstream.org/Bits/Public-Endpoint-Django-Rest-Framework
 
 
