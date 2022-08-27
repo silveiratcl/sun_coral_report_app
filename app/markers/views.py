@@ -61,21 +61,19 @@ class MarkersMapView(TemplateView):
     """Markers map view."""
 
     template_name = 'map.html'
-    permission_classes = []
-    authentication_classes = []
     bbox_filter_field = 'location'
     filter_backends = (filters.InBBoxFilter,)
     queryset = Marker.objects.all()
     serializer_class = MarkerSerializer
+    authentication_classes = []
+    permission_classes = []
 
-    def get_serializer_class(self):
-         """Return the serializer class for request"""
-         if self.action == 'list':
-            return serializers.MarkerSerializer
-         elif self.action == 'upload_image':
-            return serializers.MarkerImageSerializer #########
 
-    #def get(self, request):
-        #return Response({'map.html'}) #https://techstream.org/Bits/Public-Endpoint-Django-Rest-Framework
+
+
+
+
+
+ #https://techstream.org/Bits/Public-Endpoint-Django-Rest-Framework
 
 
