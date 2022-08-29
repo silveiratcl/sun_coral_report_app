@@ -4,9 +4,9 @@ const osm = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [osm], minZoom: 5 });
 map.
     locate()
-    .on("locationfound", (e) => map.setView(e.latlng, 8))
-    .on("locationerror", () => map.setView([-26.28,-48.37], 6));
-
+    .on("locationfound", (e) => map.setView(e.latlng, 12))
+    .on("locationerror", () => map.setView([-26.28,-48.37], 12));
+//insert function to display actual location on map
 async function load_markers() {
     const markers_url = `/api/markers/markers/?in_bbox=${map.getBounds().toBBoxString()}`
     const response = await fetch(markers_url)

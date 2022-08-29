@@ -4,6 +4,7 @@ Django admin customization
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+from leaflet.admin import LeafletGeoAdmin
 
 from core import models
 
@@ -29,4 +30,12 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
-admin.site.register(models.Marker)
+admin.site.register(
+    models.Marker,
+    LeafletGeoAdmin,
+    settings_overrides =  {
+        'DEFAULT_CENTER': (-26.283088, -48.365682),
+        'DEFAULT_ZOOM': 10,
+        'TILES': [('','//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png','')],
+    }
+)

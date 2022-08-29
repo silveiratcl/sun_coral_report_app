@@ -11,6 +11,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.gis.geos import Point
 from django.views.generic.base import TemplateView
+#from rest_framework.views import APIView
+
 from django.shortcuts import render
 
 from core.models import Marker
@@ -24,23 +26,23 @@ class MarkerViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.InBBoxFilter,)
     queryset = Marker.objects.all()
     serializer_class = MarkerSerializer
-    authentication_classes = []
-    permission_classes = []
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    #authentication_classes = []
+    #permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    # def get_queryset(self):
-    #     """Retrieve markers for authenticated user"""
-    #     return self.queryset.filter(user=self.request.user).order_by('-id')
+    def get_queryset(self):
+         """Retrieve markers for authenticated user"""
+         return self.queryset.filter(user=self.request.user).order_by('-id')
 
-    # def get_serializer_class(self):
-    #     """Return the serializer class for request"""
-    #     if self.action == 'list':
-    #         return serializers.MarkerSerializer
-    #     elif self.action == 'upload_image':
-    #         return serializers.MarkerImageSerializer #########
+    def get_serializer_class(self):
+         """Return the serializer class for request"""
+         if self.action == 'list':
+             return serializers.MarkerSerializer
+         elif self.action == 'upload_image':
+             return serializers.MarkerImageSerializer
 
-    #     return self.serializer_class
+         return self.serializer_class
 
     def perform_create(self, serializer):
         """Create a new marker"""
@@ -57,7 +59,22 @@ class MarkerViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class MarkerViewSet(viewsets.ReadOnlyModelViewSet):
+    """Marker view set."""
+
+    bbox_filter_field = "location"
+    filter_backends = (filters.InBBoxFilter,)
+    queryset = Marker.objects.all()
+    serializer_class = MarkerSerializer
+
 class MarkersMapView(TemplateView):
     """Markers map view."""
 
     template_name = 'map.html'
+    authentication_classes = []
+    permission_classes = []
+
+
+ #https://techstream.org/Bits/Public-Endpoint-Django-Rest-Framework
+
+

@@ -57,7 +57,7 @@ class Marker(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE,
     )
-    name = models.CharField(max_length=255) #local name
+    name = models.CharField(max_length=255) #local name # foreign key for th segment?
     location = models.PointField()
     image = models.ImageField(null=True, upload_to=marker_image_file_path) #image function
     #models.CharField(max_length=100, blank=True, default='') image not mandatory
