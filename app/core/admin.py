@@ -34,7 +34,7 @@ admin.site.register(
     models.Marker,
     LeafletGeoAdmin,
     settings_overrides =  {
-        'DEFAULT_CENTER': (-26.28, -48.37),
+        'DEFAULT_CENTER': (-26.283088, -48.365682),
         'DEFAULT_ZOOM': 10,
         'TILES': [('','//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png','')],
     }

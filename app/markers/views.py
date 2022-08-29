@@ -11,6 +11,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.gis.geos import Point
 from django.views.generic.base import TemplateView
+#from rest_framework.views import APIView
+
 from django.shortcuts import render
 
 from core.models import Marker
@@ -38,7 +40,7 @@ class MarkerViewSet(viewsets.ModelViewSet):
          if self.action == 'list':
              return serializers.MarkerSerializer
          elif self.action == 'upload_image':
-             return serializers.MarkerImageSerializer #########
+             return serializers.MarkerImageSerializer
 
          return self.serializer_class
 
@@ -57,21 +59,20 @@ class MarkerViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class MarkerViewSet(viewsets.ReadOnlyModelViewSet):
+    """Marker view set."""
+
+    bbox_filter_field = "location"
+    filter_backends = (filters.InBBoxFilter,)
+    queryset = Marker.objects.all()
+    serializer_class = MarkerSerializer
+
 class MarkersMapView(TemplateView):
     """Markers map view."""
 
     template_name = 'map.html'
-    bbox_filter_field = 'location'
-    filter_backends = (filters.InBBoxFilter,)
-    queryset = Marker.objects.all()
-    serializer_class = MarkerSerializer
     authentication_classes = []
     permission_classes = []
-
-
-
-
-
 
 
  #https://techstream.org/Bits/Public-Endpoint-Django-Rest-Framework
